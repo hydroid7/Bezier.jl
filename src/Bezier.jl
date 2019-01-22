@@ -3,18 +3,18 @@ module Bezier
 export bezier
 
 # Linear interpolation between two points
-function bezier{T<:AbstractFloat}(t::Real, P1::Array{T}, P2::Array{T})
+function bezier(t::Real, P1::Array{T}, P2::Array{T})::T where T <: AbstractFloat
     if 0 ≤ t ≤ 1
         return P1 + t * (P2 - P1)
     else
         # t must be bounded by [0, 1]
         # TODO is this the right way to notify users?
-        throw(DomainError())
+        throw(DomainError(t, "t must be bounded by [0, 1]"))
     end
 end
 
 # Higher-order interpolation
-function bezier{T<:AbstractFloat}(t::Real, points::Vector{Vector{T}})
+function bezier(t::Real, points::Vector{Vector{T}})::T where T <: AbstractFloat
     dimension = size(points, 1)
     if dimension ≤ 1
         return points
@@ -28,7 +28,7 @@ function bezier{T<:AbstractFloat}(t::Real, points::Vector{Vector{T}})
 end
 
 # Each row of the matrix is a point
-function bezier{T<:AbstractFloat}(t::Real, points::Matrix{T})
+function bezier(t::Real, points::Matrix{T})::T where T <: AbstractFloat
     rows, cols = size(points)
     if rows ≤ 1
         return points
